@@ -17,3 +17,11 @@ Nomad Code Zoom Clone Coding useing NodeJS,WebRTC and WebSockets;
 ### 2-2. set pug and view file root
 
 ### 2-3. ref mvp.css
+
+## 3.WebSockets
+
+### 3-1.ws 설치 , npm i ws
+
+### 3-2. server websocket server setting
+
+### 3-3. client make connection backend websocket
