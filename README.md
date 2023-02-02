@@ -9,3 +9,11 @@ Nomad Code Zoom Clone Coding useing NodeJS,WebRTC and WebSockets;
 ### 1-2. npm i @babel/core @babel/cli @babel/node @babel/preset-env -D(바벨 pakage 설치)
 
 ### 1-3.npm i express pug
+
+## 2.pront setting
+
+### 2-1. make folder public and views
+
+### 2-2. set pug and view file root
+
+### 2-3. ref mvp.css
