@@ -47,9 +47,16 @@ const wss = new WebSocketServer({
 });*/
 
 wss.on("connection", (socket) => {
-  console.log(socket);
+  console.log("Connected to Browser");
+  socket.on("close", () => {
+    console.log("Server disconnected");
+  });
+  socket.on("message", (data) => {
+    console.log("received: %s", data);
+  });
+  socket.send("hello!");
 });
 
-wss.on("message", function message(data) {
-  console.log("received: %s", data);
+wss.on("close", () => {
+  console.log("Closed Socket Connection");
 });
