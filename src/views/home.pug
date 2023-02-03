@@ -10,13 +10,6 @@ html(lang="en")
         header 
             h1 Noom
         main   
-            //메시지 리스트 표출
-            form#nickName 
-                input(type="text",placeholder = "choose a nickname" ,required)
-                button Save
-            ul 
-            //메시지 입력
-            form#messge
-                input(type="text",placeholder = "input a msg" ,required)
-                button Send
+          
+        script(src="/socket.io/socket.io.js") 
         script(src="/public/js/app.js") 

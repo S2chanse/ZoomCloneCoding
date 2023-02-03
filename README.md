@@ -30,4 +30,10 @@ Nomad Code Zoom Clone Coding useing NodeJS,WebRTC and WebSockets;
 
 ## 4.Connect And Send Message others
 
-### 4-1.
+## 5.socket io
+
+### 5-1.install socket io , npm i socket.io
+
+### 5-2.back-end set socket io
+
+### 5-3.front-end set socket io

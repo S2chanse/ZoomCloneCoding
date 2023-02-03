@@ -1,7 +1,6 @@
 import express from "express";
 import http from "http";
-import ws, { WebSocket, WebSocketServer } from "ws";
-
+import SocketIO from "socket.io";
 const app = express();
 //pug설정
 app.set("view engine", "pug");
@@ -16,60 +15,41 @@ const handleListen = () => console.log(`Listening on http:localhost:3000`);
 // app.listen(3000, handleListen);
 
 //express의 application을 통해, http 서버를 만든다.
-const server = http.createServer(app);
+const httpServer = http.createServer(app);
 //websocket과 http서버 동시에  한 서버에서 실행되도록 작업
-const wss = new WebSocket.Server({ server });
+//const wss = new WebSocket.Server({ server });
+//socket io 작업
+const wsServer = SocketIO(httpServer);
 
-server.listen(3000, handleListen);
-//only used WebSocket Server
-/**
-const wss = new WebSocketServer({
-  port: 8080,
-  perMessageDeflate: {
-    zlibDeflateOptions: {
-      // See zlib defaults.
-      chunkSize: 1024,
-      memLevel: 7,
-      level: 3,
-    },
-    zlibInflateOptions: {
-      chunkSize: 10 * 1024,
-    },
-    // Other options settable:
-    clientNoContextTakeover: true, // Defaults to negotiated value.
-    serverNoContextTakeover: true, // Defaults to negotiated value.
-    serverMaxWindowBits: 10, // Defaults to negotiated value.
-    // Below options specified as default values.
-    concurrencyLimit: 10, // Limits zlib concurrency for perf.
-    threshold: 1024, // Size (in bytes) below which messages
-    // should not be compressed if context takeover is disabled.
-  },
-});*/
+httpServer.listen(3000, handleListen);
 
 const sockets = [];
+wsServer.on("connection", (socket) => {
+  console.log(socket);
+});
 //socket 연결
-wss.on("connection", (socket) => {
-  sockets.push(socket);
-  socket["ninkName"] = "Anonymouse";
-  console.log("Connected to Browser");
-  socket.on("close", () => {
-    console.log("Server disconnected");
-  });
-  socket.on("message", (message) => {
-    const parsed = JSON.parse(message);
-    switch (parsed.type) {
-      case "message":
-        sockets.forEach((aSocket) => {
-          aSocket.send(`${socket.ninkName} : ${parsed.payload}`);
-        });
-        break;
-      case "nickName":
-        socket["ninkName"] = parsed.payload;
-        break;
-    }
-  });
-});
+// wss.on("connection", (socket) => {
+//   sockets.push(socket);
+//   socket["ninkName"] = "Anonymouse";
+//   console.log("Connected to Browser");
+//   socket.on("close", () => {
+//     console.log("Server disconnected");
+//   });
+//   socket.on("message", (message) => {
+//     const parsed = JSON.parse(message);
+//     switch (parsed.type) {
+//       case "message":
+//         sockets.forEach((aSocket) => {
+//           aSocket.send(`${socket.ninkName} : ${parsed.payload}`);
+//         });
+//         break;
+//       case "nickName":
+//         socket["ninkName"] = parsed.payload;
+//         break;
+//     }
+//   });
+// });
 
-wss.on("close", () => {
-  console.log("Closed Socket Connection");
-});
+// wss.on("close", () => {
+//   console.log("Closed Socket Connection");
+// });
