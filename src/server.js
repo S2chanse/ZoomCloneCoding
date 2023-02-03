@@ -50,15 +50,23 @@ const sockets = [];
 //socket 연결
 wss.on("connection", (socket) => {
   sockets.push(socket);
+  socket["ninkName"] = "Anonymouse";
   console.log("Connected to Browser");
   socket.on("close", () => {
     console.log("Server disconnected");
   });
   socket.on("message", (message) => {
-    console.log("received : %s", message);
-    sockets.forEach((aSocket) => {
-      aSocket.send(message);
-    });
+    const parsed = JSON.parse(message);
+    switch (parsed.type) {
+      case "message":
+        sockets.forEach((aSocket) => {
+          aSocket.send(`${socket.ninkName} : ${parsed.payload}`);
+        });
+        break;
+      case "nickName":
+        socket["ninkName"] = parsed.payload;
+        break;
+    }
   });
 });
 
