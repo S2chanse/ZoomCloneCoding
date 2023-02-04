@@ -37,3 +37,9 @@ Nomad Code Zoom Clone Coding useing NodeJS,WebRTC and WebSockets;
 ### 5-2.back-end set socket io
 
 ### 5-3.front-end set socket io
+
+## 6.used Socket io
+
+### 6-1. used join and enter the room
+
+### 6-2. used socket io join and emit, announce others in same room except me

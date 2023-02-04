@@ -7,6 +7,12 @@ roomDiv.hidden = true;
 
 let room_name = "";
 
+const addMessage = (message) => {
+  const ul = roomDiv.querySelector("ul");
+  const li = document.createElement("li");
+  li.innerText = message;
+  ul.append(li);
+};
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   const input = form.querySelector("input");
@@ -18,6 +24,10 @@ form.addEventListener("submit", (e) => {
   });
   room_name = input.value;
   input.value = "";
+});
+
+socket.on("welcome", () => {
+  addMessage("Someone Join!");
 });
 // const messageList = document.querySelector("ul");
 // const nickNameForm = document.querySelector("#nickName");
