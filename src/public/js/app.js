@@ -1,5 +1,21 @@
 const socket = io(); //자동으로 서버를 찾아서 연결해준다.
+const welcomeDiv = document.querySelector("#welcome");
+const form = welcomeDiv.querySelector("form");
 
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const input = form.querySelector("input");
+  socket.emit(
+    "enter_room",
+    { payload: input.value },
+    [1, 2, 3],
+    false,
+    (msg) => {
+      console.log(`Backend - said : ${msg}`);
+    }
+  );
+  input.value = "";
+});
 // const messageList = document.querySelector("ul");
 // const nickNameForm = document.querySelector("#nickName");
 // const messgeForm = document.querySelector("#messge");

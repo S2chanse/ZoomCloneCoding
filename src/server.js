@@ -25,7 +25,10 @@ httpServer.listen(3000, handleListen);
 
 const sockets = [];
 wsServer.on("connection", (socket) => {
-  console.log(socket);
+  socket.on("enter_room", (...args) => {
+    console.log(args);
+    setTimeout(() => args[args.length - 1](`Hello from Backend`), 15000);
+  });
 });
 //socket 연결
 // wss.on("connection", (socket) => {
