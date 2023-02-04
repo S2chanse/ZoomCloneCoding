@@ -12,13 +12,14 @@ html(lang="en")
         main   
             div#welcome
                 form
-                    input(type="text", name="",placeholder="room name",required)
+                    input(type="text", name="",placeholder="room name",required,id = "room_name")
+                    input(type="text", name="",placeholder="nick name",required,id = "nick")
                     button Enter Room
             div#room
                 h3
                 ul
-                form 
+                form#message 
                     input(type="text", name="",placeholder="message",required)
-                    button Send Message
+                    button Send 
         script(src="/socket.io/socket.io.js") 
         script(src="/public/js/app.js") 

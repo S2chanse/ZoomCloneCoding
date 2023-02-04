@@ -23,19 +23,21 @@ const wsServer = SocketIO(httpServer);
 
 httpServer.listen(3000, handleListen);
 
-const sockets = [];
 wsServer.on("connection", (socket) => {
   socket.onAny((envet) => console.log(`Socket Event : ${envet}`));
-  socket.on("enter_room", (room_name, done) => {
+  socket.on("enter_room", (room_name, nick_name, done) => {
     socket.join(room_name);
+    socket["nick_name"] = nick_name;
     done();
-    socket.to(room_name).emit("welcome");
+    socket.to(room_name).emit("welcome", socket.nick_name);
   });
   socket.on("disconnecting", () => {
-    socket.rooms.forEach((room) => socket.to(room).emit("bye"));
+    socket.rooms.forEach((room) =>
+      socket.to(room).emit("bye", socket.nick_name)
+    );
   });
   socket.on("new_message", (msg, room_name, done) => {
-    socket.to(room_name).emit("new_message", msg);
+    socket.to(room_name).emit("new_message", `${socket.nick_name}: ${msg}`);
     done();
   });
 });
