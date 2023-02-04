@@ -25,9 +25,10 @@ httpServer.listen(3000, handleListen);
 
 const sockets = [];
 wsServer.on("connection", (socket) => {
-  socket.on("enter_room", (...args) => {
-    console.log(args);
-    setTimeout(() => args[args.length - 1](`Hello from Backend`), 15000);
+  socket.onAny((envet) => console.log(`Socket Event : ${envet}`));
+  socket.on("enter_room", (room_name, done) => {
+    socket.join(room_name);
+    done();
   });
 });
 //socket 연결
