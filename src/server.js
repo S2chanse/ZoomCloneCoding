@@ -31,6 +31,13 @@ wsServer.on("connection", (socket) => {
     done();
     socket.to(room_name).emit("welcome");
   });
+  socket.on("disconnecting", () => {
+    socket.rooms.forEach((room) => socket.to(room).emit("bye"));
+  });
+  socket.on("new_message", (msg, room_name, done) => {
+    socket.to(room_name).emit("new_message", msg);
+    done();
+  });
 });
 //socket 연결
 // wss.on("connection", (socket) => {
