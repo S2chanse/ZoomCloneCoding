@@ -47,3 +47,7 @@ Nomad Code Zoom Clone Coding useing NodeJS,WebRTC and WebSockets;
 ### 6-3. communication chat without name, used rooms fnc
 
 ### 6-4. chat with nick name, used socket object field
+
+## 7.Adapter
+
+### 7-1.used Adapter to find rooms and sids
