@@ -31,27 +31,35 @@ const publicRooms = () => {
   } = wsServer;
   const publicRooms = [];
   rooms.forEach((_, key) => {
-    if (sids.get(key) === undefined) publicRooms.push(key);
+    if (sids.get(key) == undefined) publicRooms.push(key);
   });
   return publicRooms;
 };
 
+const countRoom = (roomName) => {
+  return wsServer.sockets.adapter.rooms.get(roomName)?.size;
+};
 wsServer.on("connection", (socket) => {
   socket.onAny((envet) => {
-    console.log(wsServer.sockets.adapter);
-    console.log(`Socket Event : ${envet}`);
+    //console.log(wsServer.sockets.adapter);
+    //console.log(`Socket Event : ${envet}`);
   });
   socket.on("enter_room", (room_name, nick_name, done) => {
     socket.join(room_name);
     socket["nick_name"] = nick_name;
-    done();
-    ``;
-    socket.to(room_name).emit("welcome", socket.nick_name);
+    done(countRoom(room_name));
+    socket
+      .to(room_name)
+      .emit("welcome", socket.nick_name, countRoom(room_name));
+    wsServer.sockets.emit("room_change", publicRooms());
   });
   socket.on("disconnecting", () => {
-    socket.rooms.forEach((room) =>
-      socket.to(room).emit("bye", socket.nick_name)
-    );
+    socket.rooms.forEach((room) => {
+      socket.to(room).emit("bye", socket.nick_name, countRoom(room) - 1);
+    });
+  });
+  socket.on("disconnect", () => {
+    wsServer.sockets.emit("room_change", publicRooms());
   });
   socket.on("new_message", (msg, room_name, done) => {
     socket.to(room_name).emit("new_message", `${socket.nick_name}: ${msg}`);

@@ -51,3 +51,5 @@ Nomad Code Zoom Clone Coding useing NodeJS,WebRTC and WebSockets;
 ## 7.Adapter
 
 ### 7-1.used Adapter to find rooms and sids
+
+### 7-2.used socke io Adapter to count users

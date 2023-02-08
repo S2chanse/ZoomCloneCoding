@@ -25,11 +25,11 @@ const handleMessageSubmit = (e) => {
   input.value = "";
 };
 
-const showRoom = () => {
+const showRoom = (new_cnt) => {
   welcomeDiv.hidden = true;
   roomDiv.hidden = false;
   const h3 = roomDiv.querySelector("h3");
-  h3.innerText = room_name;
+  h3.innerText = `Room: ${room_name} (${new_cnt})`;
   const room_form = roomDiv.querySelector("#message");
   room_form.addEventListener("submit", handleMessageSubmit);
 };
@@ -45,15 +45,28 @@ form.addEventListener("submit", (e) => {
   nick_name.value = "";
 });
 
-socket.on("welcome", (user) => {
+socket.on("welcome", (user, new_cnt) => {
+  const h3 = roomDiv.querySelector("h3");
+  h3.innerText = `Room: ${room_name} (${new_cnt})`;
   addMessage(`${user} arrived!`);
 });
 
-socket.on("new_message", (msg, user) => {
+socket.on("new_message", (msg) => {
   addMessage(msg);
 });
-socket.on("bye", (left) => {
+socket.on("bye", (left, new_cnt) => {
+  const h3 = roomDiv.querySelector("h3");
+  h3.innerText = `Room: ${room_name} (${new_cnt})`;
   addMessage(`${left} Left!`);
+});
+socket.on("room_change", (rooms) => {
+  const room_list = welcomeDiv.querySelector("ul");
+  room_list.innerHTML = "";
+  rooms.forEach((room) => {
+    const li = document.createElement("li");
+    li.innerHTML = room;
+    room_list.append(li);
+  });
 });
 // const messageList = document.querySelector("ul");
 // const nickNameForm = document.querySelector("#nickName");
