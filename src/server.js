@@ -1,6 +1,7 @@
 import express from "express";
 import http from "http";
-import SocketIO from "socket.io";
+import { Server } from "socket.io";
+import { instrument } from "@socket.io/admin-ui";
 const app = express();
 //pug설정
 app.set("view engine", "pug");
@@ -19,7 +20,17 @@ const httpServer = http.createServer(app);
 //websocket과 http서버 동시에  한 서버에서 실행되도록 작업
 //const wss = new WebSocket.Server({ server });
 //socket io 작업
-const wsServer = SocketIO(httpServer);
+const wsServer = new Server(httpServer, {
+  cors: {
+    origin: ["https://admin.socket.io"],
+    credentials: true,
+  },
+});
+
+instrument(wsServer, {
+  auth: false,
+  mode: "development",
+});
 
 httpServer.listen(3000, handleListen);
 

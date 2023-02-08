@@ -53,3 +53,9 @@ Nomad Code Zoom Clone Coding useing NodeJS,WebRTC and WebSockets;
 ### 7-1.used Adapter to find rooms and sids
 
 ### 7-2.used socke io Adapter to count users
+
+## 8.Socket io backend Admin Panel
+
+### 8-1.npm i @socket.io/admin-ui
+
+### 8-2.import { instrument } from "@socket.io/admin-ui"
