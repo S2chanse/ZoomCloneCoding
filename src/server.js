@@ -33,7 +33,13 @@ instrument(wsServer, {
 });
 
 httpServer.listen(3000, handleListen);
-
+wsServer.on("connection", (socket) => {
+  socket.on("enter_room", (room_name, done) => {
+    socket.join(room_name);
+    done();
+    socket.to(room_name).emit("welcome");
+  });
+});
 // socket io chat backend
 // const publicRooms = () => {
 //   const {

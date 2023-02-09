@@ -3,10 +3,14 @@ const myFace = document.getElementById("myFace");
 const muteBtn = document.getElementById("mute");
 const cameraBtn = document.getElementById("camera");
 const cameraSelect = document.getElementById("cameras");
+const callDiv = document.getElementById("call");
+
+callDiv.hidden = true;
 
 let myStream;
 let muted = false;
 let cameraOff = false;
+let room_name = "";
 
 const getCameras = async () => {
   try {
@@ -46,7 +50,6 @@ const getMedia = async (deviceId) => {
   }
 };
 
-getMedia();
 const handleMuteClick = () => {
   myStream
     .getAudioTracks()
@@ -68,6 +71,28 @@ const handleCameraChange = async () => {
 muteBtn.addEventListener("click", handleMuteClick);
 cameraBtn.addEventListener("click", handleCameraClick);
 cameraSelect.addEventListener("input", handleCameraChange);
+
+//WelcomeForm
+const welcomeDiv = document.getElementById("welcome");
+const welcomeForm = welcomeDiv.querySelector("form");
+const startMedia = () => {
+  welcomeForm.hidden = true;
+  callDiv.hidden = false;
+  getMedia();
+};
+welcomeForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const room_name_input = welcomeForm.querySelector("#room_name");
+  room_name = room_name_input.value;
+  socket.emit("enter_room", room_name, startMedia);
+  room_name.value = "";
+});
+
+//Socket Code
+socket.on("welcome", () => {
+  console.log("Someone Join");
+});
+
 //socket io chat js
 // const welcomeDiv = document.querySelector("#welcome");
 // const form = welcomeDiv.querySelector("form");

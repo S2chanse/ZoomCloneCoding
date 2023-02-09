@@ -10,12 +10,17 @@ html(lang="en")
         header 
             h1 Zoom Clone 
         main   
-            div#myStrem
-                video#myFace(autoplay,playsinline,width="400",height="400")
-                button#mute Unmute
-                button#camera On
-                select#cameras
-                    option(value="device") Face Camera
+            die#welcome    
+                form
+                    input(type="text", name="",placeholder="room name",required,id = "room_name")
+                    button Enter Room
+            div#call
+                div#myStrem
+                    video#myFace(autoplay,playsinline,width="400",height="400")
+                    button#mute Unmute
+                    button#camera On
+                    select#cameras
+                        option(value="device") Face Camera
         //socket io chat html
         //- header 
         //-     h1 Noom
