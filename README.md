@@ -67,3 +67,5 @@ Nomad Code Zoom Clone Coding useing NodeJS,WebRTC and WebSockets;
 ### 9-2.used cameras
 
 ### 9-3.set backend join room
+
+### 9-4.send offer info to others in same room

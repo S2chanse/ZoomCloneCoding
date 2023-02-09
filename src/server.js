@@ -39,6 +39,9 @@ wsServer.on("connection", (socket) => {
     done();
     socket.to(room_name).emit("welcome");
   });
+  socket.on("offer", (offer, room_name) => {
+    socket.to(room_name).emit("offer", offer);
+  });
 });
 // socket io chat backend
 // const publicRooms = () => {

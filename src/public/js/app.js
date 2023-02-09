@@ -11,6 +11,7 @@ let myStream;
 let muted = false;
 let cameraOff = false;
 let room_name = "";
+let myPeerConnection;
 
 const getCameras = async () => {
   try {
@@ -75,10 +76,11 @@ cameraSelect.addEventListener("input", handleCameraChange);
 //WelcomeForm
 const welcomeDiv = document.getElementById("welcome");
 const welcomeForm = welcomeDiv.querySelector("form");
-const startMedia = () => {
+const startMedia = async () => {
   welcomeForm.hidden = true;
   callDiv.hidden = false;
-  getMedia();
+  await getMedia();
+  makeConnection();
 };
 welcomeForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -89,9 +91,23 @@ welcomeForm.addEventListener("submit", (e) => {
 });
 
 //Socket Code
-socket.on("welcome", () => {
-  console.log("Someone Join");
+socket.on("welcome", async () => {
+  const offer = await myPeerConnection.createOffer();
+  myPeerConnection.setLocalDescription(offer);
+  console.log("send Offer");
+  socket.emit("offer", offer, room_name);
 });
+
+socket.on("offer", async (offer) => {
+  console.log(offer);
+});
+//RTC Code
+const makeConnection = () => {
+  myPeerConnection = new RTCPeerConnection();
+  myStream
+    .getTracks()
+    .forEach((track) => myPeerConnection.addTrack(track, myStream));
+};
 
 //socket io chat js
 // const welcomeDiv = document.querySelector("#welcome");
