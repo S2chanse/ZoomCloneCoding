@@ -76,17 +76,18 @@ cameraSelect.addEventListener("input", handleCameraChange);
 //WelcomeForm
 const welcomeDiv = document.getElementById("welcome");
 const welcomeForm = welcomeDiv.querySelector("form");
-const startMedia = async () => {
+const initCall = async () => {
   welcomeForm.hidden = true;
   callDiv.hidden = false;
   await getMedia();
   makeConnection();
 };
-welcomeForm.addEventListener("submit", (e) => {
+welcomeForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const room_name_input = welcomeForm.querySelector("#room_name");
   room_name = room_name_input.value;
-  socket.emit("enter_room", room_name, startMedia);
+  await initCall();
+  socket.emit("enter_room", room_name);
   room_name.value = "";
 });
 
@@ -99,14 +100,22 @@ socket.on("welcome", async () => {
 });
 
 socket.on("offer", async (offer) => {
-  console.log(offer);
+  await myPeerConnection.setRemoteDescription(offer);
+  const answer = await myPeerConnection.createAnswer();
+  myPeerConnection.setLocalDescription(answer);
+  socket.emit("answer", answer, room_name);
+});
+socket.on("answer", async (answer) => {
+  myPeerConnection.setRemoteDescription(answer);
 });
 //RTC Code
 const makeConnection = () => {
   myPeerConnection = new RTCPeerConnection();
-  myStream
-    .getTracks()
-    .forEach((track) => myPeerConnection.addTrack(track, myStream));
+  if (myStream) {
+    myStream
+      .getTracks()
+      .forEach((track) => myPeerConnection.addTrack(track, myStream));
+  }
 };
 
 //socket io chat js

@@ -34,13 +34,15 @@ instrument(wsServer, {
 
 httpServer.listen(3000, handleListen);
 wsServer.on("connection", (socket) => {
-  socket.on("enter_room", (room_name, done) => {
+  socket.on("enter_room", (room_name) => {
     socket.join(room_name);
-    done();
     socket.to(room_name).emit("welcome");
   });
   socket.on("offer", (offer, room_name) => {
     socket.to(room_name).emit("offer", offer);
+  });
+  socket.on("answer", (answer, room_name) => {
+    socket.to(room_name).emit("answer", answer);
   });
 });
 // socket io chat backend
