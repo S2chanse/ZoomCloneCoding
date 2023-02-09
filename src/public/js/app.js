@@ -100,17 +100,27 @@ socket.on("welcome", async () => {
 });
 
 socket.on("offer", async (offer) => {
+  console.log("recived offer");
   await myPeerConnection.setRemoteDescription(offer);
   const answer = await myPeerConnection.createAnswer();
   myPeerConnection.setLocalDescription(answer);
   socket.emit("answer", answer, room_name);
+  console.log("send answer");
 });
 socket.on("answer", async (answer) => {
+  console.log("recived answer");
   myPeerConnection.setRemoteDescription(answer);
+});
+
+socket.on("ice", (ice) => {
+  console.log("received candidate");
+  myPeerConnection.addIceCandidate(ice);
 });
 //RTC Code
 const makeConnection = () => {
   myPeerConnection = new RTCPeerConnection();
+  myPeerConnection.addEventListener("icecandidate", handleIce);
+  myPeerConnection.addEventListener("addstream", handleAddStrem);
   if (myStream) {
     myStream
       .getTracks()
@@ -118,6 +128,15 @@ const makeConnection = () => {
   }
 };
 
+const handleIce = (data) => {
+  console.log("send candidate");
+  socket.emit("ice", data.candidate, room_name);
+};
+
+const handleAddStrem = (data) => {
+  const peerstream = document.getElementById("peerStream");
+  peerstream.srcObject = data.stream;
+};
 //socket io chat js
 // const welcomeDiv = document.querySelector("#welcome");
 // const form = welcomeDiv.querySelector("form");
