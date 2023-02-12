@@ -8,7 +8,7 @@ const callDiv = document.getElementById("call");
 callDiv.hidden = true;
 
 let myStream;
-let muted = false;
+let muted = true;
 let cameraOff = false;
 let room_name = "";
 let myPeerConnection;
@@ -31,11 +31,11 @@ const getCameras = async () => {
 };
 const getMedia = async (deviceId) => {
   const initialConstrains = {
-    audio: true,
+    audio: false,
     video: { facingMode: "user" },
   };
   const camearConstrains = {
-    audio: true,
+    audio: false,
     video: {
       deviceId: deviceId,
     },
@@ -68,6 +68,13 @@ const handleCameraClick = () => {
 
 const handleCameraChange = async () => {
   await getMedia(cameraSelect.value);
+  if (myPeerConnection) {
+    const videoTrak = myStream.getVideoTracks()[0];
+    const videoSender = myPeerConnection
+      .getSenders()
+      .find((sender) => sender.track.kind === "video");
+    videoSender.replaceTrack(videoTrak);
+  }
 };
 muteBtn.addEventListener("click", handleMuteClick);
 cameraBtn.addEventListener("click", handleCameraClick);

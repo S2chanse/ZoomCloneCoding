@@ -73,3 +73,9 @@ Nomad Code Zoom Clone Coding useing NodeJS,WebRTC and WebSockets;
 ### 9-5.ping pong description
 
 ### 9-6.streaming webRTC
+
+### 9-7.change camera Tack info used sender
+
+### 9-8. set stun server used from google provided
+
+### 9-9. add Stun Server(It not worked google stun server after i looking for other wayys)
